@@ -1,4 +1,4 @@
-package astro_algo
+package julian
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 // TestJulianDay tests function JulianDay
 // all test cases derived from the book <astronomical algorithms> 2nd edition by Jean Meeus
 func TestJulianDay(t *testing.T) {
-	cases := map[float64]struct {
+	cases := map[JuliayDay]struct {
 		Year        int
 		Month       int
 		Day         int
@@ -36,7 +36,7 @@ func TestJulianDay(t *testing.T) {
 
 	for expect, input := range cases {
 		d, _ := NewDate(input.Year, input.Month, input.Day, input.offsetOfDay)
-		v := JulianDay(d)
+		v := d.JulianDay()
 
 		if v != expect {
 			t.Fatalf("expect Juliay day of %s to be %f, got %f",

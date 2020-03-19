@@ -1,11 +1,20 @@
-package astro_algo
+package julian
 
 import (
 	"math"
 )
 
-// JulianDay Calculate Julian day From Date
-func JulianDay(date *Date) float64 {
+// JuliayDay
+type JuliayDay float64
+
+func (jd JuliayDay) MJD() MJD {
+	return MJD(jd - 240000.5)
+}
+
+// MJD Modified Julian Day
+type MJD float64
+
+func (date *Date) JulianDay() JuliayDay {
 	year := float64(date.Year)
 	month := float64(date.Month)
 	if date.Month < 3 {
@@ -19,7 +28,8 @@ func JulianDay(date *Date) float64 {
 		b = 0
 	}
 
-	return math.Floor(365.25*(year+4716)) +
+	jd := math.Floor(365.25*(year+4716)) +
 		math.Floor(30.6001*(month+1)) +
 		d + b - 1524.5
+	return JuliayDay(jd)
 }

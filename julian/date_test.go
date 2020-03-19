@@ -1,4 +1,4 @@
-package astro_algo
+package julian
 
 import (
 	"fmt"

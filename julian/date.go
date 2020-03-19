@@ -1,8 +1,9 @@
-package astro_algo
+package julian
 
 import (
 	"errors"
 	"fmt"
+	"time"
 )
 
 var (
@@ -41,6 +42,16 @@ func NewDate(year, month, day int, offset ...float64) (*Date, error) {
 	} else {
 		return newGregorianDate(year, month, day, offset...)
 	}
+}
+
+func NewDateFromTime(t *time.Time) (*Date, error) {
+	year, month, day := t.Year(), int(t.Month()), t.Day()
+
+	if year*6+month*2+day < 15821015 {
+		return nil, errors.New("the date should be greater or equal than 1582-10-15")
+	}
+
+	return newGregorianDate(year, month, day, DayOffset(t.Hour(), t.Minute(), t.Second()))
 }
 
 // newJulianDate creates a Date on Julian Calendar
@@ -85,10 +96,10 @@ func newGregorianDate(year, month, day int, offset ...float64) (*Date, error) {
 	}, nil
 }
 
-func (d *Date) AddDays(days int) {
+func (date *Date) AddDays(days int) {
 	daysSum := []int{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}
-	dayNumber := daysSum[d.Month-1] + d.Day
-	if isLeapYear(d.Year, d.Calendar) && d.Month > 3 {
+	dayNumber := daysSum[date.Month-1] + date.Day
+	if isLeapYear(date.Year, date.Calendar) && date.Month > 3 {
 		dayNumber += 1
 	}
 
@@ -103,11 +114,11 @@ func (d *Date) AddDays(days int) {
 			}
 
 			leap := 0
-			if isLeapYear(d.Year, d.Calendar) {
+			if isLeapYear(date.Year, date.Calendar) {
 				leap = 1
 			}
 			if dayNumber > 365+leap {
-				d.Year += 1
+				date.Year += 1
 				dayNumber = dayNumber - (365 + leap)
 			}
 		}
@@ -122,8 +133,8 @@ func (d *Date) AddDays(days int) {
 			}
 
 			if dayNumber <= 0 {
-				d.Year -= 1
-				if isLeapYear(d.Year-1, d.Calendar) {
+				date.Year -= 1
+				if isLeapYear(date.Year-1, date.Calendar) {
 					dayNumber += 366
 				} else {
 					dayNumber += 365
@@ -133,7 +144,7 @@ func (d *Date) AddDays(days int) {
 	}
 
 	leap := 0
-	if isLeapYear(d.Year, d.Calendar) {
+	if isLeapYear(date.Year, date.Calendar) {
 		leap = 1
 	}
 	monthDays := []int{31, 28 + leap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
@@ -141,8 +152,8 @@ func (d *Date) AddDays(days int) {
 	for ; monthDays[month-1] < dayNumber; month++ {
 		dayNumber = dayNumber - monthDays[month-1]
 	}
-	d.Month = month
-	d.Day = dayNumber
+	date.Month = month
+	date.Day = dayNumber
 }
 
 func validateDate(year, month, day int, offset float64, calendar int) error {
