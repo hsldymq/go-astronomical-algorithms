@@ -22,8 +22,7 @@ func (mjd MJD) JulianDay() JulianDay {
 }
 
 func (date *Date) JulianDay() JulianDay {
-	year := float64(date.Year)
-	month := float64(date.Month)
+	year, month := float64(date.Year), float64(date.Month)
 	if date.Month < 3 {
 		year -= 1
 		month += 12
