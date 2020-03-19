@@ -8,7 +8,7 @@ import (
 // TestJulianDay tests function JulianDay
 // all test cases derived from the book <astronomical algorithms> 2nd edition by Jean Meeus
 func TestJulianDay(t *testing.T) {
-	cases := map[JuliayDay]struct {
+	cases := map[JulianDay]struct {
 		Year        int
 		Month       int
 		Day         int

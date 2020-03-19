@@ -5,19 +5,23 @@ import (
 )
 
 // J2000 is the julian day for 1 Jan,2000 12:00:00
-const J2000 JuliayDay = 2451545.0
+const J2000 JulianDay = 2451545.0
 
-// JuliayDay
-type JuliayDay float64
+// JulianDay julian day
+type JulianDay float64
 
-func (jd JuliayDay) MJD() MJD {
-	return MJD(jd - 240000.5)
+func (jd JulianDay) MJD() MJD {
+	return MJD(jd - 2400000.5)
 }
 
 // MJD Modified Julian Day
 type MJD float64
 
-func (date *Date) JulianDay() JuliayDay {
+func (mjd MJD) JulianDay() JulianDay {
+	return JulianDay(mjd + 2400000.5)
+}
+
+func (date *Date) JulianDay() JulianDay {
 	year := float64(date.Year)
 	month := float64(date.Month)
 	if date.Month < 3 {
@@ -34,5 +38,5 @@ func (date *Date) JulianDay() JuliayDay {
 	jd := math.Floor(365.25*(year+4716)) +
 		math.Floor(30.6001*(month+1)) +
 		d + b - 1524.5
-	return JuliayDay(jd)
+	return JulianDay(jd)
 }
