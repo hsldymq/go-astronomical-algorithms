@@ -37,7 +37,7 @@ func NewDate(year, month, day int, offset ...float64) (*Date, error) {
 	} else if ymd >= 15821015 {
 		return newGregorianDate(year, month, day, offset...)
 	} else {
-		return nil, fmt.Errorf("the date %d-%02d-%02d does not exist", year, month, day)
+		return nil, fmt.Errorf("the date %d %s,%d does not exist", day, time.Month(month).String()[:3], year)
 	}
 }
 
@@ -45,7 +45,7 @@ func NewDateFromTime(t *time.Time) (*Date, error) {
 	year, month, day := t.Year(), int(t.Month()), t.Day()
 
 	if year*10000+month*100+day < 15821015 {
-		return nil, errors.New("not support dates before 1582-10-15")
+		return nil, errors.New("not support dates before 15 Oct,1582")
 	}
 
 	return newGregorianDate(year, month, day, DayOffset(t.Hour(), t.Minute(), t.Second()))
