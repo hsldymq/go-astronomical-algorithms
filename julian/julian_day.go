@@ -4,6 +4,9 @@ import (
 	"math"
 )
 
+// J2000 is the julian day for 1 Jan,2000 12:00:00
+const J2000 JuliayDay = 2451545.0
+
 // JuliayDay
 type JuliayDay float64
 
