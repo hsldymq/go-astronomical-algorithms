@@ -10,7 +10,7 @@ var (
 	GregorianCalendar = 1
 )
 
-// JulianDate represents a Julian calendar date
+// Date represents a date in Julian calendar or Gregorian calendar
 type Date struct {
 	Year        int
 	Month       int
