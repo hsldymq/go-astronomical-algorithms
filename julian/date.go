@@ -31,24 +31,21 @@ type Date struct {
 }
 
 func NewDate(year, month, day int, offset ...float64) (*Date, error) {
-	if year > 1582 {
+	ymd := year*10000 + month*100 + day
+	if ymd <= 15821004 {
+		return newJulianDate(year, month, day, offset...)
+	} else if ymd >= 15821015 {
 		return newGregorianDate(year, month, day, offset...)
-	} else if year < 1582 {
-		return newJulianDate(year, month, day, offset...)
-	} else if month < 10 || (month == 10 && day <= 4) {
-		return newJulianDate(year, month, day, offset...)
-	} else if month == 10 && day > 4 && day < 15 {
-		return newGregorianDate(year, month, day+10, offset...)
 	} else {
-		return newGregorianDate(year, month, day, offset...)
+		return nil, fmt.Errorf("the date %d-%02d-%02d does not exist", year, month, day)
 	}
 }
 
 func NewDateFromTime(t *time.Time) (*Date, error) {
 	year, month, day := t.Year(), int(t.Month()), t.Day()
 
-	if year*6+month*2+day < 15821015 {
-		return nil, errors.New("the date should be greater or equal than 1582-10-15")
+	if year*10000+month*100+day < 15821015 {
+		return nil, errors.New("not support dates before 1582-10-15")
 	}
 
 	return newGregorianDate(year, month, day, DayOffset(t.Hour(), t.Minute(), t.Second()))
