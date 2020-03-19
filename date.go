@@ -10,6 +10,16 @@ var (
 	GregorianCalendar = 1
 )
 
+// DayOffset 计算该时刻相对于一天开始的偏移
+// 例:
+//		00:00:00, 应返回0
+//		04:48:00,即走过了17280秒,即86400秒的1/5, 所以应返回0.2
+//		以此类推
+func DayOffset(hour, minute, second int) float64 {
+	seconds := float64(hour*3600 + 60*minute + second)
+	return seconds / float64(86400)
+}
+
 // Date represents a date in Julian calendar or Gregorian calendar
 type Date struct {
 	Year        int

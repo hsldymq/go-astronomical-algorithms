@@ -5,6 +5,27 @@ import (
 	"testing"
 )
 
+func TestDayOffset(t *testing.T) {
+	cases := []struct {
+		Hour   int
+		Minute int
+		Second int
+		Expect float64
+	}{
+		{Hour: 0, Minute: 0, Second: 0, Expect: 0},
+		{Hour: 4, Minute: 48, Second: 0, Expect: 0.2},
+		{Hour: 9, Minute: 36, Second: 0, Expect: 0.4},
+		{Hour: 12, Minute: 0, Second: 0, Expect: 0.5},
+	}
+
+	for _, each := range cases {
+		actual := DayOffset(each.Hour, each.Minute, each.Second)
+		if actual != each.Expect {
+			t.Fatalf("%02d:%02d:%02d, expect %f, got %f", each.Hour, each.Minute, each.Second, each.Expect, actual)
+		}
+	}
+}
+
 func TestIsLeapYear(t *testing.T) {
 	cases := []struct {
 		Year     int
