@@ -10,6 +10,7 @@ const J2000 JulianDay = 2451545.0
 // JulianDay julian day
 type JulianDay float64
 
+// MJD convert Julian day to Modified julian day
 func (jd JulianDay) MJD() MJD {
 	return MJD(jd - 2400000.5)
 }
